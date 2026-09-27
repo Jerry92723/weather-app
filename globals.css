@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  /* 学院学术风 Design Tokens */
+  --color-paper: #f5f1e8;      /* 纸色米白背景 */
+  --color-parchment: #ede7d8;  /* 深一档纸面 */
+  --color-ink: #2a2c2a;        /* 墨色正文 */
+  --color-ink-soft: #565a54;   /* 次级文字 */
+  --color-accent: #3f5a3a;     /* 墨绿主色 */
+  --color-accent-deep: #2f452c;
+  --color-rust: #9c4a2e;       /* 深红强调色 */
+  --color-brass: #a8852f;      /* 黄铜点缀 */
+  --color-line: #d8d0bd;       /* 描边 */
+  --color-cream: #fbf8f1;      /* 卡片底色 */
+  --color-mist: #e7e0cf;       /* 弱填充 */
+
+  --font-serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --font-sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+
+  --shadow-book: 0 1px 2px rgba(42, 44, 42, 0.06), 0 4px 16px rgba(42, 44, 42, 0.08);
+  --shadow-lift: 0 8px 30px rgba(42, 44, 42, 0.14);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(168, 133, 47, 0.05), transparent 42%),
+      radial-gradient(circle at 84% 12%, rgba(63, 90, 58, 0.06), transparent 40%),
+      linear-gradient(rgba(42, 44, 42, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(42, 44, 42, 0.025) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 34px 34px, 34px 34px;
+    background-attachment: fixed;
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-serif);
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-cream);
+  }
+  /* 学术风滚动条 */
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-brass); }
+}
+
+@layer utilities {
+  .paper-card {
+    background: var(--color-cream);
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-book);
+  }
+  .hairline {
+    border-color: var(--color-line);
+  }
+  .text-balance { text-wrap: balance; }
+  .fade-up {
+    animation: fadeUp 0.5s ease both;
+  }
+  .fade-up-1 { animation-delay: 0.05s; }
+  .fade-up-2 { animation-delay: 0.12s; }
+  .fade-up-3 { animation-delay: 0.19s; }
+  .fade-up-4 { animation-delay: 0.26s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  code        String?
+  instructor  String?
+  semester    String?
+  accentColor String   @default("#4A5D43")
+  description String?
+  createdAt   DateTime @default(now())
+  nodes       KnowledgeNode[]
+  materials   Material[]
+  notes       Note[]
+  preps       PrepProject[]
+}
+
+// 知识框架树：章节 / 知识点（自关联）
+model KnowledgeNode {
+  id        String           @id @default(cuid())
+  courseId  String
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  parentId  String?
+  parent    KnowledgeNode?   @relation("Tree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  KnowledgeNode[]  @relation("Tree")
+  title     String
+  type      String           @default("chapter") // chapter | topic
+  note      String?
+  order     Int              @default(0)
+  createdAt DateTime         @default(now())
+  materials Material[]
+  notes     Note[]
+}
+
+// 课件 / 教材 / 笔记 / 其他资料
+model Material {
+  id         String     @id @default(cuid())
+  courseId   String
+  course     Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  nodeId     String?
+  node       KnowledgeNode? @relation(fields: [nodeId], references: [id], onDelete: SetNull)
+  week       Int?
+  title      String
+  kind       String     @default("courseware") // courseware | textbook | note | other
+  fileName   String?
+  filePath   String?
+  sourceUrl  String?
+  tags       String?
+  note       String?
+  createdAt  DateTime   @default(now())
+  prepItems  PrepItem[]
+}
+
+// 笔记沉淀
+model Note {
+  id        String   @id @default(cuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  nodeId    String?
+  node      KnowledgeNode? @relation(fields: [nodeId], references: [id], onDelete: SetNull)
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+}
+
+// Pre 项目（一次演讲）
+model PrepProject {
+  id        String     @id @default(cuid())
+  title     String
+  courseId  String
+  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  outline   String?    // 生成的提纲
+  script    String?    // 生成的讲稿
+  createdAt DateTime   @default(now())
+  items     PrepItem[]
+}
+
+model PrepItem {
+  id        String       @id @default(cuid())
+  prepId    String
+  prep      PrepProject  @relation(fields: [prepId], references: [id], onDelete: Cascade)
+  materialId String
+  material  Material     @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  role      String       @default("reference")
+}
