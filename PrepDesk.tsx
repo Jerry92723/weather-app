@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { KindBadge } from "@/components/ui/bits";
+import { KindBadge } from "./bits";
 import { kindLabel, weekLabel } from "@/lib/utils";
 
 type Course = {
