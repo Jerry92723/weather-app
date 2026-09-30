@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { KindBadge } from "./bits";
-import { kindLabel, weekLabel } from "../lib/utils";
+import { kindLabel, weekLabel } from "/lib/utils";
 
 type Course = {
   id: string;
